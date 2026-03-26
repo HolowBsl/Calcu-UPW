@@ -3,42 +3,66 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Calculateur de matériaux</title>
+<title>Calculateur LSCS</title>
 
 <style>
 body {
+    margin: 0;
     font-family: Arial;
     background: #0b1220;
     color: white;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
     padding: 20px;
 }
+
 h1 {
     text-align: center;
+    margin-bottom: 20px;
 }
-.container {
-    max-width: 600px;
-    margin: auto;
-}
-.item {
-    margin: 10px 0;
-}
-input {
-    width: 60px;
-}
-button {
-    margin-top: 20px;
-    padding: 10px;
-    width: 100%;
-    background: #1e90ff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-.result {
-    margin-top: 20px;
-    background: #111;
+
+.card {
+    background: #111827;
     padding: 15px;
     border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+
+input {
+    width: 60px;
+    background: #0b1220;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #1e90ff;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.result {
+    background: #020617;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-size: 18px;
 }
 </style>
 
@@ -47,60 +71,83 @@ button {
 <body>
 
 <div class="container">
-<h1>Calculateur de matériaux</h1>
+<h1>⚡ Calculateur LSCS</h1>
 
-<!-- INPUTS -->
+<div class="card">
+<h3>🎥 Équipement</h3>
 
-<div class="item">Borne de recharge : <input type="number" id="borne" value="0"></div>
-<div class="item">Radar : <input type="number" id="radar" value="0"></div>
-<div class="item">Panneau pédestre : <input type="number" id="panneau1" value="0"></div>
-<div class="item">Panneau triple : <input type="number" id="panneau2" value="0"></div>
-<div class="item">Panneau mural : <input type="number" id="panneau3" value="0"></div>
+<div class="item">Microphone <input type="number" id="micro" value="0"></div>
+<div class="item">Micro Perche <input type="number" id="perche" value="0"></div>
+<div class="item">Caméra épaule <input type="number" id="camera" value="0"></div>
+<div class="item">Kit caméra fixe <input type="number" id="kitcam" value="0"></div>
+<div class="item">Kit lumière fixe <input type="number" id="kitlight" value="0"></div>
+<div class="item">Kit micro fixe <input type="number" id="kitmicro" value="0"></div>
+<div class="item">Micro main <input type="number" id="micromain" value="0"></div>
+</div>
 
-<div class="item">Microphone : <input type="number" id="micro" value="0"></div>
-<div class="item">Micro perche : <input type="number" id="perche" value="0"></div>
-<div class="item">Caméra épaule : <input type="number" id="camera" value="0"></div>
+<div class="card">
+<h3>🏙️ Infrastructure</h3>
+
+<div class="item">Borne recharge <input type="number" id="borne" value="0"></div>
+<div class="item">Radar <input type="number" id="radar" value="0"></div>
+<div class="item">Panneau pédestre <input type="number" id="p1" value="0"></div>
+<div class="item">Panneau triple <input type="number" id="p2" value="0"></div>
+<div class="item">Panneau mural <input type="number" id="p3" value="0"></div>
+</div>
+
+<div class="card">
+<h3>🔋 Batterie</h3>
+
+<div class="item">Batterie portable <input type="number" id="bat1" value="0"></div>
+<div class="item">Batterie lithium-ion <input type="number" id="bat2" value="0"></div>
+</div>
 
 <button onclick="calculer()">Calculer</button>
 
 <div class="result" id="resultat"></div>
+
 </div>
 
 <script>
 function calculer() {
 
-    let total = {
-        organique: 0,
-        alliage: 0,
-        electronique: 0,
-        polyester: 0,
-        polymere: 0
-    };
+let total = {o:0,a:0,e:0,p:0,po:0};
 
-    function add(qty, o,a,e,p,po) {
-        total.organique += qty * o;
-        total.alliage += qty * a;
-        total.electronique += qty * e;
-        total.polyester += qty * p;
-        total.polymere += qty * po;
-    }
+function add(q,o,a,e,p,po){
+    total.o += q*o;
+    total.a += q*a;
+    total.e += q*e;
+    total.p += q*p;
+    total.po += q*po;
+}
 
-    add(borne.value, 10,40,35,5,10);
-    add(radar.value, 0,10,10,2,3);
-    add(panneau1.value,10,15,15,3,7);
-    add(panneau2.value,20,20,30,19,11);
-    add(panneau3.value,30,40,50,12,18);
+// ÉQUIPEMENT
+add(micro.value,0,0,2,0,2);
+add(perche.value,0,0,2,0,4);
+add(camera.value,0,0,3,0,2);
+add(kitcam.value,0,0,4,0,2);
+add(kitlight.value,0,0,3,0,3);
+add(kitmicro.value,0,0,2,0,5);
+add(micromain.value,0,0,2,0,2);
 
-    add(micro.value,0,0,2,0,2);
-    add(perche.value,0,0,2,0,4);
-    add(camera.value,0,0,3,0,2);
+// INFRA
+add(borne.value,10,40,35,5,10);
+add(radar.value,0,10,10,2,3);
+add(p1.value,10,15,15,3,7);
+add(p2.value,20,20,30,19,11);
+add(p3.value,30,40,50,12,18);
 
-    document.getElementById("resultat").innerHTML =
-        ":bricks: Organiques : " + total.organique + "<br>" +
-        ":nut_and_bolt: Alliage : " + total.alliage + "<br>" +
-        ":computer: Electronique : " + total.electronique + "<br>" +
-        ":thread: Polyester : " + total.polyester + "<br>" +
-        ":test_tube: Polymère : " + total.polymere;
+// BATTERIES
+add(bat1.value,0,0,2,0,3);
+add(bat2.value,0,0,2,3,5);
+
+document.getElementById("resultat").innerHTML =
+"🧱 Organiques : "+total.o+"<br>"+
+"🔩 Alliage : "+total.a+"<br>"+
+"💻 Electronique : "+total.e+"<br>"+
+"🧵 Polyester : "+total.p+"<br>"+
+"🧪 Polymère : "+total.po;
+
 }
 </script>
 
