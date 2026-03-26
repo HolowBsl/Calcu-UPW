@@ -59,6 +59,13 @@ button {
     margin-top: 10px;
 }
 
+button:last-of-type {
+    background: #dc2626;
+}
+
+button:last-of-type:hover {
+    background: #b91c1c;
+}
 .result {
     background: #020617;
     padding: 15px;
@@ -126,6 +133,7 @@ button {
 </div>
 
 <button onclick="calculer()">Calculer</button>
+<button onclick="resetForm()">Reset</button>
 
 <div class="result" id="resultat"></div>
 
@@ -142,6 +150,16 @@ function add(q,o,a,e,p,po){
     total.e += q*e;
     total.p += q*p;
     total.po += q*po;
+}
+
+function resetForm() {
+
+let inputs = document.querySelectorAll("input");
+
+inputs.forEach(input => input.value = 0);
+
+document.getElementById("resultat").innerHTML = "";
+
 }
 
 // ÉQUIPEMENT
