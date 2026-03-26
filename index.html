@@ -152,16 +152,6 @@ function add(q,o,a,e,p,po){
     total.po += q*po;
 }
 
-function resetForm() {
-
-let inputs = document.querySelectorAll("input");
-
-inputs.forEach(input => input.value = 0);
-
-document.getElementById("resultat").innerHTML = "";
-
-}
-
 // ÉQUIPEMENT
 add(micro.value,0,0,2,0,2);
 add(perche.value,0,0,2,0,4);
@@ -188,6 +178,18 @@ document.getElementById("resultat").innerHTML =
 "💻 Electronique : "+total.e+"<br>"+
 "🧵 Polyester : "+total.p+"<br>"+
 "🧪 Polymère : "+total.po;
+
+}
+
+
+// ✅ RESET (ajout ici, dans le même script)
+function resetForm() {
+
+document.querySelectorAll("input").forEach(input => {
+    input.value = 0;
+});
+
+document.getElementById("resultat").innerHTML = "";
 
 }
 </script>
