@@ -130,8 +130,9 @@ function calculer() {
 let total = {o:0,a:0,e:0,p:0,po:0};
 let details = "";
 let coutTotal = 0;
+let venteTotal = 0;
 
-// 💰 Prix des matériaux
+// 💰 Prix matériaux
 const prix = {
     o: 100,
     a: 1500,
@@ -140,12 +141,24 @@ const prix = {
     po: 75
 };
 
-// Fonction ajout + calcul coût
+// 🔢 Arrondi intelligent
+function arrondi(val){
+    if(val >= 100000){
+        return Math.round(val / 10000) * 10000;
+    }
+    if(val >= 1000){
+        return Math.round(val / 100) * 100;
+    }
+    return Math.round(val);
+}
+
+// Fonction principale
 function add(q,o,a,e,p,po,nom){
 
     q = parseInt(q) || 0;
 
     let coutUnitaire = (o*prix.o) + (a*prix.a) + (e*prix.e) + (p*prix.p) + (po*prix.po);
+    let venteUnitaire = arrondi(coutUnitaire * 1.5);
 
     total.o += q*o;
     total.a += q*a;
@@ -153,9 +166,13 @@ function add(q,o,a,e,p,po,nom){
     total.p += q*p;
     total.po += q*po;
 
+    coutTotal += coutUnitaire * q;
+    venteTotal += venteUnitaire * q;
+
     if(q > 0){
-        details += "• " + nom + " x" + q +
-        " → " + coutUnitaire + "$ / unité | " + (coutUnitaire*q) + "$ total<br>";
+        details += "• " + nom + " x" + q + "<br>" +
+        "💸 Revient : " + coutUnitaire + "$ | 🏷️ Vente : " + venteUnitaire + "$<br>" +
+        "➡️ Total vente : " + (venteUnitaire*q) + "$<br><br>";
     }
 }
 
@@ -179,14 +196,6 @@ add(p3.value,30,40,50,12,18,"Panneau mural");
 add(bat1.value,0,0,2,0,3,"Batterie portable");
 add(bat2.value,0,0,2,3,5,"Batterie lithium-ion");
 
-// 💰 Calcul total global
-coutTotal =
-(total.o * prix.o) +
-(total.a * prix.a) +
-(total.e * prix.e) +
-(total.p * prix.p) +
-(total.po * prix.po);
-
 // 🖥️ Affichage
 document.getElementById("resultat").innerHTML =
 "📦 Matériaux nécessaires :<br><br>" +
@@ -196,10 +205,10 @@ document.getElementById("resultat").innerHTML =
 "🧵 Polyester : "+total.p+"<br>"+
 "🧪 Polymère : "+total.po+"<br><br>"+
 
-"💰 Coût total : "+coutTotal+"$<br><br>"+
+"💰 Coût total : "+coutTotal+"$<br>"+
+"🏷️ Vente totale : "+venteTotal+"$<br><br>"+
 
-"📋 Détail par item :<br>" +
-details;
+"📋 Détail :<br>" + details;
 
 }
 
