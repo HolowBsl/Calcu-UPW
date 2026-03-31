@@ -74,6 +74,14 @@
             font-size: 18px;
         }
 
+        .resume {
+            background: #020617;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
         .btn-retour {
             position: fixed;
             bottom: 15px;
@@ -133,14 +141,19 @@
         <button onclick="resetForm()">Reset</button>
 
         <div class="result" id="resultat"></div>
+        <div class="resume" id="resume"></div>
     </div>
 
     <script>
         function calculer() {
 
             let total = { o: 0, a: 0, e: 0, p: 0, po: 0 };
+            let resume = [];
 
-            function add(q, o, a, e, p, po) {
+            function add(q, o, a, e, p, po, nom) {
+                if (q > 0) {
+                    resume.push(nom + " x" + q);
+                }
                 total.o += q * o;
                 total.a += q * a;
                 total.e += q * e;
@@ -149,24 +162,24 @@
             }
 
             // ÉQUIPEMENT
-            add(micro.value, 0, 0, 2, 0, 2);
-            add(perche.value, 0, 0, 2, 0, 4);
-            add(camera.value, 0, 0, 3, 0, 2);
-            add(kitcam.value, 0, 0, 4, 0, 2);
-            add(kitlight.value, 0, 0, 3, 0, 3);
-            add(kitmicro.value, 0, 0, 2, 0, 5);
-            add(micromain.value, 0, 0, 2, 0, 2);
+            add(micro.value, 0, 0, 2, 0, 2, "Microphone");
+            add(perche.value, 0, 0, 2, 0, 4, "Micro Perche");
+            add(camera.value, 0, 0, 3, 0, 2, "Caméra épaule");
+            add(kitcam.value, 0, 0, 4, 0, 2, "Kit caméra fixe");
+            add(kitlight.value, 0, 0, 3, 0, 3, "Kit lumière fixe");
+            add(kitmicro.value, 0, 0, 2, 0, 5, "Kit micro fixe");
+            add(micromain.value, 0, 0, 2, 0, 2, "Micro main");
 
             // INFRA
-            add(borne.value, 10, 40, 35, 5, 10);
-            add(radar.value, 0, 10, 10, 2, 3);
-            add(p1.value, 10, 15, 15, 3, 7);
-            add(p2.value, 20, 20, 30, 19, 11);
-            add(p3.value, 30, 40, 50, 12, 18);
+            add(borne.value, 10, 40, 35, 5, 10, "Borne recharge");
+            add(radar.value, 0, 10, 10, 2, 3, "Radar");
+            add(p1.value, 10, 15, 15, 3, 7, "Panneau pédestre");
+            add(p2.value, 20, 20, 30, 19, 11, "Panneau triple");
+            add(p3.value, 30, 40, 50, 12, 18, "Panneau mural");
 
             // BATTERIES
-            add(bat1.value, 0, 0, 2, 0, 3);
-            add(bat2.value, 0, 0, 2, 3, 5);
+            add(bat1.value, 0, 0, 2, 0, 3, "Batterie portable");
+            add(bat2.value, 0, 0, 2, 3, 5, "Batterie lithium-ion");
 
             document.getElementById("resultat").innerHTML =
                 "🧱 Organiques : " + total.o + "<br>" +
@@ -174,6 +187,10 @@
                 "💻 Electronique : " + total.e + "<br>" +
                 "🧵 Polyester : " + total.p + "<br>" +
                 "🧪 Polymère : " + total.po;
+
+            document.getElementById("resume").innerHTML =
+                "<strong>📦 Résumé de la commande :</strong><br>" +
+                (resume.length > 0 ? resume.join("<br>") : "Aucun objet sélectionné");
         }
 
         function resetForm() {
@@ -182,6 +199,7 @@
             });
 
             document.getElementById("resultat").innerHTML = "";
+            document.getElementById("resume").innerHTML = "";
         }
     </script>
 
