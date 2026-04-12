@@ -135,7 +135,7 @@ let venteTotal = 0;
 // 💰 Prix matériaux
 const prix = {
     o: 100,
-    a: 1000,
+    a: 750,
     e: 300,
     p: 300,
     po: 75
@@ -147,7 +147,7 @@ function arrondi(val){
         return Math.round(val / 10000) * 10000;
     }
     if(val >= 1000){
-        return Math.round(val / 100) * 100;
+        return Math.round(val / 1000) * 1000;
     }
     return Math.round(val);
 }
