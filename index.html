@@ -55,6 +55,11 @@ button {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 10px;
+    font-size: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
 }
 
 button:last-of-type {
@@ -71,6 +76,7 @@ button:last-of-type:hover {
     border-radius: 10px;
     margin-top: 15px;
     font-size: 16px;
+    line-height: 1.6;
 }
 
 .btn-retour {
@@ -90,136 +96,231 @@ button:last-of-type:hover {
 <body>
 
 <div class="container">
+
 <h1>⚡ La table de craft</h1>
 
+<!-- ÉQUIPEMENT -->
 <div class="card">
 <h3>🎥 Matériel Électronique</h3>
-<div class="item">Microphone <input type="number" id="micro" value="0"></div>
-<div class="item">Micro Perche <input type="number" id="perche" value="0"></div>
-<div class="item">Caméra épaule <input type="number" id="camera" value="0"></div>
-<div class="item">Kit caméra fixe <input type="number" id="kitcam" value="0"></div>
-<div class="item">Kit lumière fixe <input type="number" id="kitlight" value="0"></div>
-<div class="item">Kit micro fixe <input type="number" id="kitmicro" value="0"></div>
-<div class="item">Micro main <input type="number" id="micromain" value="0"></div>
+
+<div class="item">
+    <span>Microphone</span>
+    <input type="number" id="micro" value="0">
 </div>
 
+<div class="item">
+    <span>Micro Perche</span>
+    <input type="number" id="perche" value="0">
+</div>
+
+<div class="item">
+    <span>Caméra épaule</span>
+    <input type="number" id="camera" value="0">
+</div>
+
+<div class="item">
+    <span>Kit caméra fixe</span>
+    <input type="number" id="kitcam" value="0">
+</div>
+
+<div class="item">
+    <span>Kit lumière fixe</span>
+    <input type="number" id="kitlight" value="0">
+</div>
+
+<div class="item">
+    <span>Kit micro fixe</span>
+    <input type="number" id="kitmicro" value="0">
+</div>
+
+<div class="item">
+    <span>Micro main</span>
+    <input type="number" id="micromain" value="0">
+</div>
+</div>
+
+<!-- INFRA -->
 <div class="card">
 <h3>🏙️ Matériel Lourd</h3>
-<div class="item">Borne recharge <input type="number" id="borne" value="0"></div>
-<div class="item">Radar <input type="number" id="radar" value="0"></div>
-<div class="item">Panneau pédestre <input type="number" id="p1" value="0"></div>
-<div class="item">Panneau triple <input type="number" id="p2" value="0"></div>
-<div class="item">Panneau mural <input type="number" id="p3" value="0"></div>
+
+<div class="item">
+    <span>Borne recharge</span>
+    <input type="number" id="borne" value="0">
 </div>
 
+<div class="item">
+    <span>Radar</span>
+    <input type="number" id="radar" value="0">
+</div>
+
+<div class="item">
+    <span>Panneau pédestre</span>
+    <input type="number" id="p1" value="0">
+</div>
+
+<div class="item">
+    <span>Panneau triple</span>
+    <input type="number" id="p2" value="0">
+</div>
+
+<div class="item">
+    <span>Panneau mural</span>
+    <input type="number" id="p3" value="0">
+</div>
+</div>
+
+<!-- BATTERIES -->
 <div class="card">
 <h3>🔋 Matériel pour Véhicule Électrique</h3>
-<div class="item">Batterie portable <input type="number" id="bat1" value="0"></div>
-<div class="item">Batterie lithium-ion <input type="number" id="bat2" value="0"></div>
+
+<div class="item">
+    <span>Batterie portable</span>
+    <input type="number" id="bat1" value="0">
+</div>
+
+<div class="item">
+    <span>Batterie lithium-ion</span>
+    <input type="number" id="bat2" value="0">
+</div>
 </div>
 
 <button onclick="calculer()">Calculer</button>
 <button onclick="resetForm()">Reset</button>
 
 <div class="result" id="resultat"></div>
+
 </div>
 
 <script>
 function calculer() {
 
-let total = {o:0,a:0,e:0,p:0,po:0};
-let details = "";
-let coutTotal = 0;
-let venteTotal = 0;
+    let total = {
+        o:0,
+        a:0,
+        e:0,
+        p:0,
+        po:0
+    };
 
-// 💰 Prix matériaux
-const prix = {
-    o: 100,
-    a: 1000,
-    e: 500,
-    p: 300,
-    po: 250
-};
+    let details = "";
+    let coutTotal = 0;
+    let venteTotal = 0;
 
-// 🔢 Arrondi intelligent
-function arrondi(val){
-    if(val >= 100000){
-        return Math.round(val / 10000) * 10000;
+    // 💰 Prix matériaux
+    const prix = {
+        o: 100,
+        a: 1000,
+
+        // électronique normal
+        e: 500,
+
+        // électronique équipement
+        eEquipement: 300,
+
+        p: 300,
+        po: 250
+    };
+
+    // 🔢 Arrondi intelligent
+    function arrondi(val){
+
+        if(val >= 100000){
+            return Math.round(val / 10000) * 10000;
+        }
+
+        if(val >= 1000){
+            return Math.round(val / 1000) * 1000;
+        }
+
+        return Math.round(val);
     }
-    if(val >= 1000){
-        return Math.round(val / 1000) * 1000;
+
+    // 📦 Fonction principale
+    function add(q,o,a,e,p,po,nom,isEquipement=false){
+
+        q = parseInt(q) || 0;
+
+        // prix électronique différent
+        let prixElectronique = isEquipement
+            ? prix.eEquipement
+            : prix.e;
+
+        let coutUnitaire =
+            (o * prix.o) +
+            (a * prix.a) +
+            (e * prixElectronique) +
+            (p * prix.p) +
+            (po * prix.po);
+
+        let venteUnitaire = arrondi(coutUnitaire * 1.5);
+
+        total.o += q * o;
+        total.a += q * a;
+        total.e += q * e;
+        total.p += q * p;
+        total.po += q * po;
+
+        coutTotal += coutUnitaire * q;
+        venteTotal += venteUnitaire * q;
+
+        if(q > 0){
+
+            details +=
+            "• " + nom + " x" + q + "<br>" +
+            "💸 Revient → " + coutUnitaire + "$ | " +
+            "🏷️ Vente → " + venteUnitaire + "$<br>" +
+            "➡️ Total vente : " + (venteUnitaire * q) + "$<br><br>";
+        }
     }
-    return Math.round(val);
+
+    // 🎥 ÉQUIPEMENT (électronique à 300$)
+    add(micro.value,0,0,2,0,2,"Microphone",true);
+    add(perche.value,0,0,2,0,4,"Micro Perche",true);
+    add(camera.value,0,0,3,0,2,"Caméra épaule",true);
+    add(kitcam.value,0,0,4,0,2,"Kit caméra fixe",true);
+    add(kitlight.value,0,0,3,0,3,"Kit lumière fixe",true);
+    add(kitmicro.value,0,0,2,0,5,"Kit micro fixe",true);
+    add(micromain.value,0,0,2,0,2,"Micro main",true);
+
+    // 🏙️ INFRA (électronique à 500$)
+    add(borne.value,10,40,35,5,10,"Borne recharge");
+    add(radar.value,0,10,10,2,3,"Radar");
+    add(p1.value,8,12,12,3,6,"Panneau pédestre");
+    add(p2.value,17,17,26,16,9,"Panneau triple");
+    add(p3.value,25,34,42,10,15,"Panneau mural");
+
+    // 🔋 BATTERIES (électronique à 500$)
+    add(bat1.value,0,0,2,0,3,"Batterie portable");
+    add(bat2.value,0,0,2,3,5,"Batterie lithium-ion");
+
+    // 🖥️ Résultat
+    document.getElementById("resultat").innerHTML =
+
+    "📦 Matériaux nécessaires :<br><br>" +
+
+    "🧱 Organiques : " + total.o + "<br>" +
+    "🔩 Alliage : " + total.a + "<br>" +
+    "💻 Electronique : " + total.e + "<br>" +
+    "🧵 Polyester : " + total.p + "<br>" +
+    "🧪 Polymère : " + total.po + "<br><br>" +
+
+    "💰 Coût total : " + coutTotal + "$<br>" +
+    "🏷️ Vente totale : " + venteTotal + "$<br><br>" +
+
+    "📋 Détail :<br><br>" +
+
+    details;
 }
 
-// Fonction principale
-function add(q,o,a,e,p,po,nom){
+// 🔄 RESET
+function resetForm(){
 
-    q = parseInt(q) || 0;
+    document.querySelectorAll("input").forEach(input => {
+        input.value = 0;
+    });
 
-    let coutUnitaire = (o*prix.o) + (a*prix.a) + (e*prix.e) + (p*prix.p) + (po*prix.po);
-    let venteUnitaire = arrondi(coutUnitaire * 1.5);
-
-    total.o += q*o;
-    total.a += q*a;
-    total.e += q*e;
-    total.p += q*p;
-    total.po += q*po;
-
-    coutTotal += coutUnitaire * q;
-    venteTotal += venteUnitaire * q;
-
-    if(q > 0){
-        details += "• " + nom + " x" + q + "<br>" +
-        "💸 Revient → " + coutUnitaire + "$ | 🏷️ Vente → " + venteUnitaire + "$<br>" +
-        "➡️ Total vente : " + (venteUnitaire*q) + "<br><br>";
-    }
-}
-
-// ÉQUIPEMENT
-add(micro.value,0,0,2,0,2,"Microphone");
-add(perche.value,0,0,2,0,4,"Micro Perche");
-add(camera.value,0,0,3,0,2,"Caméra épaule");
-add(kitcam.value,0,0,4,0,2,"Kit caméra fixe");
-add(kitlight.value,0,0,3,0,3,"Kit lumière fixe");
-add(kitmicro.value,0,0,2,0,5,"Kit micro fixe");
-add(micromain.value,0,0,2,0,2,"Micro main");
-
-// INFRA
-add(borne.value,10,40,35,5,10,"Borne recharge");
-add(radar.value,0,10,10,2,3,"Radar");
-add(p1.value,8,12,12,3,6,"Panneau pédestre");
-add(p2.value,17,17,26,16,9,"Panneau triple");
-add(p3.value,25,34,42,10,15,"Panneau mural");
-
-// BATTERIES
-add(bat1.value,0,0,2,0,3,"Batterie portable");
-add(bat2.value,0,0,2,3,5,"Batterie lithium-ion");
-
-// 🖥️ Affichage
-document.getElementById("resultat").innerHTML =
-"📦 Matériaux nécessaires :<br><br>" +
-"🧱 Organiques : "+total.o+"<br>"+
-"🔩 Alliage : "+total.a+"<br>"+
-"💻 Electronique : "+total.e+"<br>"+
-"🧵 Polyester : "+total.p+"<br>"+
-"🧪 Polymère : "+total.po+"<br><br>"+
-
-"💰 Coût total : "+coutTotal+"$<br>"+
-"🏷️ Vente totale : "+venteTotal+"$<br><br>"+
-
-"📋 Détail :<br>" + details;
-
-}
-
-// RESET
-function resetForm() {
-document.querySelectorAll("input").forEach(input => input.value = 0);
-document.getElementById("resultat").innerHTML = "";
+    document.getElementById("resultat").innerHTML = "";
 }
 </script>
 
 <a href="https://upw.alwaysdata.net" class="btn-retour">⬅️</a>
-
-</body>
-</html>
